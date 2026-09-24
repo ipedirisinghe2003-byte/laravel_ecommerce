@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,255 +7,123 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon" />
     <script src="https://cdn.tailwindcss.com"></script>
-
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#0369a1', // Adjust this to match your brand blue
-                        secondary: '#075985',
-                    },
-                    container: {
-                        center: true,
-                        padding: '1rem',
-                        screens: {
-                            xl: '1200px',
-                        },
+                        primary: '#0369a1',
+                        secondary: '#0d5d7a',
+                        sidebar: '#0d5d7a',
+                        sidebarLight: '#0f6988',
                     }
                 }
             }
         }
     </script>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link rel="stylesheet" href="{{ asset('css/plugins/pe-icon-7-stroke.css') }}" />
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-
-    <link rel="stylesheet" href="{{ asset('css/custom.css') }}" />
-
-    <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<!--
-<body class="font-sans text-gray-600 antialiased">
+<body class="bg-gray-100 text-gray-700 antialiased">
+    <div class="min-h-screen flex flex-col">
+        <header class="bg-white border-b border-gray-200 h-20 flex items-center justify-between px-4 lg:px-6">
+           <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-sky-800 text-gray-100 transition duration-300 transform -translate-x-full lg:translate-x-0 lg:static lg:inset-0">
+<div class="flex items-center justify-center h-16 bg-sky-700 border-b border-gray-800">
+<a href="{{route('admin.index')}}"><img src="{{asset('images/logo.png')}}" alt="Logo" class="h-12" /></a>
+</div>
 
-    <header class="hidden lg:block bg-white shadow-sm sticky top-0 z-50">
-        <div class="container mx-auto py-4">
-            <div class="flex justify-between items-center">
-                <div class="w-1/4">
-                    <a href="{{ route('home.index') }}">
-                        <img src="{{ asset('assets/images/logo.png') }}" alt="Logo" class="max-w-[200px]" />
-                    </a>
-                </div>
-
-                <div class="w-1/2 flex justify-center">
-                    <nav>
-                        <ul class="flex space-x-8 font-medium text-gray-700">
-                            <li><a href="index.php" class="hover:text-primary transition">Home</a></li>
-                            <li><a href="shop.php" class="hover:text-primary transition">Shop</a></li>
-                            <li><a href="cart.php" class="hover:text-primary transition">Cart</a></li>
-                            <li><a href="wishlist.php" class="hover:text-primary transition">Wishlist</a></li>
-                            <li><a href="contact.php" class="hover:text-primary transition">Contact</a></li>
-                        </ul>
-                    </nav>
-                </div>
-
-                <div class="w-1/4 flex justify-end items-center space-x-6">
-                    <div class="relative group">
-                        <button class="text-2xl hover:text-primary"><i
-                                class="fa-solid fa-magnifying-glass"></i></button>
-                        <div
-                            class="absolute right-0 mt-2 w-64 bg-white border shadow-lg p-3 rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                            <form class="flex">
-                                <input type="text" placeholder="Search..."
-                                    class="w-full border p-2 text-sm outline-none focus:border-primary" />
-                                <button class="p-2 text-primary"><i class="fa-solid fa-magnifying-glass"></i></button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <a href="wishlist.php" class="text-2xl hover:text-primary"><i class="fa-regular fa-heart"></i></a>
-
-                    <a href="cart.php" class="text-2xl hover:text-primary relative">
-                        <i class="fa-solid fa-bag-shopping"></i>
-                        <span
-                            class="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
-                    </a>
-
-                    <div class="relative group">
-                        <button class="text-2xl hover:text-primary" type="button">
-                            @auth
-                                <span class="flex items-center justify-center w-10 h-10 bg-blue-600 text-white rounded-full font-bold uppercase text-lg shadow-sm">
-                                    {{ strtoupper(Str::substr(Auth::user()->name, 0, 1)) }}
-                                </span>
-                            @else
-                                <span class="flex items-center justify-center w-10 h-10 bg-blue-600 text-white rounded-full font-bold uppercase text-lg shadow-sm">
-                                    <i class="fa-regular fa-user"></i>
-                                </span>
-                            @endauth
-                        </button>
-                        <ul
-                            class="absolute right-0 mt-2 w-40 bg-white border shadow-lg py-2 rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                            @guest
-                            <li><a href=   '{{ route("login") }}' class="block px-4 py-2 hover:bg-gray-100 text-sm">Sign In</a></li>
-                                                        <li><a href=   '{{ route("register") }}' class="block px-4 py-2 hover:bg-gray-100 text-sm">Register</a></li>
-
-                            @else
-                             <li><a href='{{ Auth::user()->utype == "ADM" ? route("admin.dashboard") : route("user.dashboard") }}' class="block px-4 py-2 hover:bg-gray-100 text-sm">My
-                                    Account</a></li>
-                            <li>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                                    @csrf
-                                </form>
-                                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="block px-4 py-2 hover:bg-gray-100 text-sm">Sign Out</a>
-                            </li>
-
-                            @endguest
-
-                        </ul>
-                    </div>
+            <div class="flex-1 flex items-center justify-center px-4">
+                <div class="w-full max-w-xl relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </span>
+                    <input type="text" placeholder="Search categories..." class="w-full rounded-md border border-gray-200 bg-gray-50 pl-11 pr-4 py-3 text-sm outline-none focus:border-primary focus:bg-white" />
                 </div>
             </div>
-        </div>
-    </header>
 
-    <header class="lg:hidden bg-white shadow-sm sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex justify-between items-center mb-4">
-                <button id="mobile-menu-btn" class="text-2xl focus:outline-none">
-                    <i class="fa-solid fa-bars"></i>
+            <div class="flex items-center gap-4 min-w-[220px] justify-end">
+                <button type="button" class="relative text-gray-600 hover:text-primary">
+                    <i class="fa-solid fa-bell text-xl"></i>
+                    <span class="absolute -top-1 -right-1 w-4 h-4 text-[10px] rounded-full bg-red-500 text-white flex items-center justify-center">3</span>
                 </button>
 
-                <a href="{{ route('home.index') }}">
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="Logo" class="max-w-[120px]" />
-                </a>
-
-                <div class="flex items-center space-x-5">
-                    <a href="wishlist.php" class="text-xl hover:text-primary">
-                        <i class="fa-regular fa-heart"></i>
-                    </a>
-
-                    <a href="cart.php" class="text-xl hover:text-primary relative">
-                        <i class="fa-solid fa-bag-shopping"></i>
-                        <span
-                            class="absolute -top-2 -right-2 bg-primary text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">3</span>
-                    </a>
-
-                    <div class="relative">
-                        <button id="mobile-avatar-button" class="text-xl hover:text-primary focus:outline-none">
-                            <i class="fa-regular fa-user"></i>
-                        </button>
-
-                        <ul id="avatar-submenu-mobile"
-                            class="absolute right-0 mt-3 w-44 bg-white border border-gray-100 shadow-xl py-2 rounded-lg hidden z-[100]">
-                            <li><a href="my-account.php"
-                                    class="block px-4 py-2 hover:bg-gray-100 text-sm text-gray-700">My Account</a></li>
-                            <li><a href="checkout.php"
-                                    class="block px-4 py-2 hover:bg-gray-100 text-sm text-gray-700">Checkout</a></li>
-                            <li class="border-t border-gray-50 mt-1">
-                                <a href="login.php"
-                                    class="block px-4 py-2 hover:bg-gray-100 text-sm font-bold text-primary">Sign In</a>
-                            </li>
-                        </ul>
+                <div class="flex items-center gap-3">
+                    <div class="text-right text-sm">
+                        <div class="font-medium text-gray-700">Admin</div>
+                        <div class="text-gray-500">Super Admin</div>
                     </div>
+                    <div class="w-10 h-10 rounded-full bg-sky-500 text-white flex items-center justify-center font-bold">A</div>
                 </div>
             </div>
+        </header>
 
-            <div class="pb-2">
-                <form action="shop.php" method="GET" class="relative">
-                    <input type="text" name="q" placeholder="Search for products..."
-                        class="w-full bg-gray-100 border-none px-4 py-2.5 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:bg-white transition-all outline-none">
-                    <button type="submit"
-                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </button>
-                </form>
-            </div>
-        </div>
-    </header>
-
-    <div id="mobile-sidebar"
-        class="fixed inset-y-0 left-0 w-64 bg-white shadow-2xl transform -translate-x-full transition-transform duration-300 z-[60]">
-        <div class="p-4 flex justify-between items-center border-b">
-            <span class="font-bold text-lg">Menu</span>
-            <button id="close-menu-btn" class="text-xl"><i class="pe-7s-close"></i></button>
-        </div>
-        <nav class="p-4">
-            <ul class="space-y-4">
-                <li><a href="index.php" class="block hover:text-primary">Home</a></li>
-                <li><a href="shop.php" class="block hover:text-primary">Shop</a></li>
-                <li><a href="cart.php" class="block hover:text-primary">Cart</a></li>
-                <li><a href="wishlist.php" class="block hover:text-primary">Wishlist</a></li>
-                <li><a href="contact.php" class="block hover:text-primary">Contact</a></li>
-            </ul>
-        </nav>
-    </div>
-    <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-[55]"></div>
-
-    <!-- Main Content Start -->
-
-    {{ $slot }}
-
-    <!-- Main Content End -->
-
-    <footer class="bg-sky-800 text-gray-100 py-16">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div>
-                    <img src="{{ asset('assets/images/logo-w.png') }}" alt="Logo" class="mb-6 max-w-[200px]" />
-                    <ul class="space-y-2 text-sm">
-                        <li>ABC, Address Here, Country</li>
-                        <li>Call Us: <a href="#" class="hover:text-primary transition">+000 000 0000</a></li>
-                        <li>Email: <a href="#" class="hover:text-primary transition">info@surfsidemedia.in</a>
+        <div class="flex flex-1 min-h-0">
+            <aside class="w-72 bg-[#0d5d7a] text-white">
+                <nav class="p-4">
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3 py-3 rounded-md {{ request()->routeIs('admin.dashboard') || request()->routeIs('admin.index') ? 'bg-[#0e6c8f] text-white font-medium' : 'hover:bg-[#0f6988] text-white/90' }}">
+                                <i class="fa-solid fa-gauge-high"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-[#0f6988] text-white/90">
+                                <i class="fa-solid fa-box"></i>
+                                <span>Products</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-[#0f6988] text-white/90">
+                                <i class="fa-solid fa-folder"></i>
+                                <span>Categories</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.brands') }}" class="flex items-center gap-3 px-3 py-3 rounded-md {{ request()->routeIs('admin.brands') ? 'bg-[#0e6c8f] text-white font-medium' : 'hover:bg-[#0f6988] text-white/90' }}">
+                                <i class="fa-solid fa-tag"></i>
+                                <span>Brands</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-[#0f6988] text-white/90">
+                                <i class="fa-solid fa-bag-shopping"></i>
+                                <span>Orders</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-[#0f6988] text-white/90">
+                                <i class="fa-solid fa-users"></i>
+                                <span>Customers</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-[#0f6988] text-white/90">
+                                <i class="fa-solid fa-star"></i>
+                                <span>Reviews</span>
+                            </a>
                         </li>
                     </ul>
-                    <div class="flex space-x-4 mt-6">
-                        <a href="#"
-                            class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary transition"><i
-                                class="fab fa-twitter"></i></a>
-                        <a href="#"
-                            class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary transition"><i
-                                class="fab fa-facebook"></i></a>
-                        <a href="#"
-                            class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary transition"><i
-                                class="fab fa-instagram"></i></a>
+
+                    <div class="mt-8 pt-4 border-t border-white/15">
+                        <div class="text-xs uppercase tracking-wider text-white/70 mb-3 px-3">Settings</div>
+                        <a href="#" class="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-[#0f6988] text-white/90">
+                            <i class="fa-solid fa-gear"></i>
+                            <span>General Settings</span>
+                        </a>
                     </div>
-                </div>
+                </nav>
+            </aside>
 
-                <div>
-                    <h4 class="text-white font-bold text-lg mb-6">Our Categories</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-primary transition">Category 1</a></li>
-                        <li><a href="#" class="hover:text-primary transition">Category 2</a></li>
-                        <li><a href="#" class="hover:text-primary transition">Furniture</a></li>
-                        <li><a href="#" class="hover:text-primary transition">Lighting</a></li>
-                    </ul>
-                </div>
+            <main class="flex-1 bg-gray-100 p-6">
+                @yield('content')
+            </main>
+        </div>
+    </div>
+</body>
+</html>
 
-                <div>
-                    <h4 class="text-white font-bold text-lg mb-6">Information</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="about.php" class="hover:text-primary transition">About Us</a></li>
-                        <li><a href="#" class="hover:text-primary transition">How to Shop</a></li>
-                        <li><a href="#" class="hover:text-primary transition">FAQ</a></li>
-                        <li><a href="contact.php" class="hover:text-primary transition">Contact Us</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="text-white font-bold text-lg mb-6">My Account</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="login.php" class="hover:text-primary transition">Sign In</a></li>
-                        <li><a href="cart.php" class="hover:text-primary transition">View Cart</a></li>
-                        <li><a href="wishlist.php" class="hover:text-primary transition">My Wishlist</a></li>
-                        <li><a href="#" class="hover:text-primary transition">Track My Order</a></li>
-                    </ul>
-                </div>
-            </div>
 
             <div class="border-t border-gray-400 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
                 <p class="text-sm">&copy; 2026 Surfside Media All rights reserved.</p>
@@ -334,7 +201,8 @@
 
             // --- 3. Swiper Initializations (Unified Logic) ---
             const initSwiper = (selector, options) => {
-                if (document.querySelector(selector)) return new Swiper(selector, options);
+
+                if (document.querySelector(selector)) return new window.Swiper(selector, options);
             };
 
             // Hero

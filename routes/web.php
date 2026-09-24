@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Middleware\Authadmin;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
 
 //Route::get('/', function () {
 
@@ -28,9 +29,16 @@ route::middleware([Authadmin::class])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/brands', [AdminController::class, 'brands'])->name('admin.brands');
-    Route::get('/index.php/admin', [AdminController::class, 'index']);
-    Route::get('/index.php/admin/dashboard', [AdminController::class, 'index']);
-    Route::get('/index.php/admin/brands', [AdminController::class, 'brands']);
+    Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories');
+    Route::get('/admin/brand-add', [AdminController::class, 'brandAdd'])->name('admin.brand-add');
+    Route::get('/admin/brand-add.php', [AdminController::class, 'brandAdd'])->name('admin.brand-add.php');
+    Route::post('/admin/brand-store', [AdminController::class, 'brandStore'])->name('admin.brand-store');
+    Route::post('/admin/brand-store.php', [AdminController::class, 'brandStore'])->name('admin.brand-store.php');
+    Route::get('/admin/brands-edit/{brand}', [AdminController::class, 'brandEdit'])->name('admin.brand-edit');
+    Route::patch('/admin/brands-update/{brand}', [AdminController::class, 'brandUpdate'])->name('admin.brand-update');
+    Route::delete('/admin/brands-delete/{brand}', [AdminController::class, 'brandDestroy'])->name('admin.brand-destroy');
+
+
 });
 
 require __DIR__.'/auth.php';

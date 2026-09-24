@@ -7,7 +7,6 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -135,7 +134,7 @@
                     </div>
                 @endif
 
-                {{ $slot }}
+                @yield('content')
             </main>
         </div>
     </div>

@@ -1,4 +1,6 @@
-<x-admin-layout>
+@extends('layouts.admin')
+
+@section('content')
     <div class="bg-white border border-gray-200 rounded-md shadow-sm overflow-hidden">
         <div class="p-6 border-b border-gray-200">
             <h1 class="text-3xl font-bold text-gray-800">Dashboard</h1>
@@ -21,4 +23,4 @@
     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
         @csrf
     </form>
-</x-admin-layout>
+@endsection

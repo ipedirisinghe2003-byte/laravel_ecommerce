@@ -17,8 +17,9 @@ class AuthAdmin
     public function handle(Request $request, Closure $next): Response
     {
         $user = Auth::user();
+        $utype = strtolower((string) ($user->utype ?? ''));
 
-        if (Auth::check() && in_array($user->utype ?? '', ['adm', 'sup'], true)) {
+        if (Auth::check() && in_array($utype, ['adm', 'sup'], true)) {
             return $next($request);
         }
 

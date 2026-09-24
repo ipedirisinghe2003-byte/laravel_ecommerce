@@ -1,110 +1,147 @@
-<x-admin-layout>
- <!-- Main Content Start -->
+@extends('layouts.admin')
 
-            <main class="flex-1 overflow-y-auto p-6 bg-gray-100">
+@section('content')
+    <div class="px-6 pt-8 pb-4">
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="text-[38px] font-bold text-gray-800 leading-none">Brands</h1>
+                <p class="mt-2 text-[15px] text-gray-500">Manage product brands and partners</p>
+            </div>
+            <a href="{{ route('admin.brand-add') }}" class="inline-flex items-center gap-2 bg-[#1d84d4] hover:bg-[#1776c0] text-white px-5 py-3 rounded-lg text-sm font-medium shadow-sm transition">
+                <i class="fa-solid fa-plus"></i>
+                <span>Add New Brand</span>
+            </a>
+        </div>
 
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                    <div>
-                        <h1 class="text-2xl font-bold text-gray-800">Brands</h1>
-                        <p class="text-sm text-gray-500">Manage product brands and partners</p>
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <form method="GET" action="{{ route('admin.brands') }}" class="px-5 py-5 border-b border-gray-200">
+                <div class="flex items-center gap-4">
+                    <div class="relative flex-1 max-w-[420px]">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
+                        <input type="search" name="search" value="{{ request('search') }}" placeholder="Search brand..." class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-700 bg-gray-50 focus:outline-none focus:border-[#1d84d4] focus:ring-2 focus:ring-sky-100">
                     </div>
-                    <a href="brand-add.php" class="bg-primary hover:bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition flex items-center gap-2 shadow-sm">
-                        <i class="fa-solid fa-plus"></i> Add New Brand
-                    </a>
-                </div>
-
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-6">
-                    <div class="flex flex-col md:flex-row gap-4 justify-between">
-                        <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto">
-                            <div class="relative w-full md:w-64">
-                                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                                    <i class="fa-solid fa-search text-gray-400"></i>
-                                </span>
-                                <input type="text" class="w-full pl-10 pr-4 py-2 border rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" placeholder="Search brand...">
-                            </div>
-
-                            <select class="w-full md:w-40 border px-3 py-2 rounded-lg text-sm focus:outline-none focus:border-primary bg-white text-gray-600">
-                                <option value="">All Status</option>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                            </select>
-                        </div>
+                    <div class="relative">
+                        <select name="status" onchange="this.form.submit()" class="appearance-none border border-gray-300 rounded-lg bg-white text-sm text-gray-600 px-4 py-3 pr-10 focus:outline-none focus:border-[#1d84d4]">
+                            <option value="all" @selected(request('status', 'all') === 'all')>All Status</option>
+                            <option value="active" @selected(request('status') === 'active')>Active</option>
+                            <option value="inactive" @selected(request('status') === 'inactive')>Inactive</option>
+                        </select>
+                        <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"><i class="fa-solid fa-chevron-down text-xs"></i></span>
                     </div>
+                    <button type="submit" class="rounded-lg bg-[#1d84d4] px-4 py-3 text-sm font-medium text-white hover:bg-[#1776c0]">Search</button>
                 </div>
+            </form>
 
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left whitespace-nowrap">
-                            <thead class="bg-gray-50 text-gray-500 text-xs uppercase font-semibold">
-                                <tr>
-                                    <th class="px-6 py-4">ID</th>
-                                    <th class="px-6 py-4">Logo</th>
-                                    <th class="px-6 py-4">Brand Name</th>
-                                    <th class="px-6 py-4">Slug</th>
-                                    <th class="px-6 py-4">Products</th>
-                                    <th class="px-6 py-4">Status</th>
-                                    <th class="px-6 py-4 text-right">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-100">
-                                <tr class="hover:bg-gray-50 transition">
-                                    <td class="px-6 py-4 text-sm text-gray-500">#101</td>
-                                    <td class="px-6 py-4">
-                                        <div class="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center border">
-                                            <img src="uploads/brands/1.png" class="max-w-[30px] max-h-[30px] object-contain" alt="Brand Logo" onerror="this.src='https://placehold.co/40x40?text=B'">
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <span class="font-semibold text-gray-800">Samsung</span>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">samsung</td>
-                                    <td class="px-6 py-4">
-                                        <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs font-semibold">120 Items</span>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <span class="bg-green-100 text-green-700 px-2.5 py-1 rounded-full text-xs font-semibold">Active</span>
-                                    </td>
-                                    <td class="px-6 py-4 text-right">
-                                        <div class="flex items-center justify-end gap-2">
-                                            <button class="w-8 h-8 rounded-full hover:bg-gray-100 text-blue-500 transition flex items-center justify-center" title="Edit">
-                                                <i class="fa-solid fa-pen-to-square"></i>
-                                            </button>
-                                            <button class="w-8 h-8 rounded-full hover:bg-gray-100 text-red-500 transition flex items-center justify-center" onclick="deleteBrand(this, 'Samsung', 101)" title="Delete">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                <td colspan="7" class="px-6 py-12 text-center">
-                                    <div class="flex flex-col items-center justify-center text-gray-500">
-                                        <i class="fa-solid fa-boxes-stacked text-4xl mb-3 text-gray-300"></i>
-                                        <h3 class="text-lg font-medium text-gray-900">Brands not available</h3>
-                                        <p class="text-sm mt-1">You haven't added any brands to your store yet.</p>
-                                        <a href="brand-add.php" class="mt-4 text-primary hover:underline text-sm font-medium">
-                                            Add your first brand
-                                        </a>
+            <div class="overflow-x-auto">
+                <table class="min-w-full border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 text-gray-500 text-[12px] uppercase tracking-[0.08em] font-semibold">
+                            <th class="px-6 py-4 text-left">ID</th>
+                            <th class="px-6 py-4 text-left">Logo</th>
+                            <th class="px-6 py-4 text-left">Brand Name</th>
+                            <th class="px-6 py-4 text-left">Slug</th>
+                            <th class="px-6 py-4 text-left">Products</th>
+                            <th class="px-6 py-4 text-left">Status</th>
+                            <th class="px-6 py-4 text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 bg-white">
+                        @forelse ($brands as $brand)
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-5 text-sm font-medium text-gray-600">{{ $brand->id }}</td>
+                                <td class="px-6 py-5">
+                                    <div class="w-12 h-12 rounded-lg border border-gray-200 bg-gray-100 flex items-center justify-center overflow-hidden shadow-sm">
+                                        @if($brand->image)
+                                            <img src="{{ asset($brand->image) }}" alt="{{ $brand->name }}" class="w-8 h-8 object-contain">
+                                        @else
+                                            <div class="w-8 h-8 rounded-md bg-gray-200 flex items-center justify-center text-[10px] font-bold text-gray-500">B</div>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td class="px-6 py-5 font-bold text-gray-800">{{ $brand->name }}</td>
+                                <td class="px-6 py-5 text-sm text-gray-600">{{ $brand->slug }}</td>
+                                <td class="px-6 py-5 text-sm text-gray-600">0</td>
+                                <td class="px-6 py-5">
+                                    <span class="inline-flex items-center justify-center min-w-[80px] rounded-full px-2.5 py-1 text-xs font-semibold {{ $brand->status ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600' }}">
+                                        {{ $brand->status ? 'Active' : 'Inactive' }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-5 text-right">
+                                    <div class="flex items-center justify-end gap-3">
+                                        <a href="{{ route('admin.brand-edit', $brand) }}" class="text-blue-500 hover:text-blue-700 text-lg" aria-label="Edit brand"><i class="fa-solid fa-pen-to-square"></i></a>
+                                        <form id="delete-brand-{{ $brand->id }}" action="{{ route('admin.brand-destroy', $brand) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" class="w-8 h-8 rounded-full hover:bg-red-50 text-red-500 transition flex items-center justify-center" onclick="openDeleteModal({{ $brand->id }}, @js($brand->name))" aria-label="Delete brand"><i class="fa-solid fa-trash"></i></button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                        @empty
+                            <tr>
+                                <td colspan="7" class="px-6 py-16 text-center">
+                                    <div class="text-gray-500">
+                                        <i class="fa-solid fa-boxes-stacked text-5xl mb-4 text-gray-300"></i>
+                                        <p class="text-xl font-semibold text-gray-700">No brands found</p>
+                                        <p class="mt-2 text-sm">Add your first brand to begin.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            @if($brands->count())
+                <div class="flex items-center justify-end px-6 py-4 border-t border-gray-200 bg-gray-50">{{ $brands->links() }}</div>
+            @endif
+        </div>
+    </div>
 
-                    <div class="px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <span class="text-sm text-gray-500">Showing <span class="font-bold text-gray-700">1-4</span> of <span class="font-bold text-gray-700">24</span> brands</span>
-
-                        <div class="flex gap-2">
-                            <button class="px-3 py-1 border rounded hover:bg-gray-50 text-gray-600 disabled:opacity-50 text-sm" disabled>Previous</button>
-                            <button class="px-3 py-1 border rounded bg-primary text-white text-sm">1</button>
-                            <button class="px-3 py-1 border rounded hover:bg-gray-50 text-gray-600 text-sm">2</button>
-                            <button class="px-3 py-1 border rounded hover:bg-gray-50 text-gray-600 text-sm">Next</button>
-                        </div>
-                    </div>
+    <div id="delete-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/45 px-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="delete-modal-title">
+        <div class="w-full max-w-md rounded-xl bg-white p-5 shadow-2xl">
+            <div class="flex items-start gap-3">
+                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-500"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <div>
+                    <h2 id="delete-modal-title" class="text-sm font-bold text-gray-800">Delete Brand</h2>
+                    <p class="mt-1 text-xs leading-5 text-gray-500">Are you sure you want to delete <span id="delete-brand-name" class="font-semibold text-gray-700"></span>? All of its data will be permanently removed. This action cannot be undone.</p>
                 </div>
+            </div>
+            <div class="mt-5 flex justify-end gap-2">
+                <button type="button" id="cancel-delete" class="rounded-md border border-gray-200 bg-white px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-50">Cancel</button>
+                <button type="button" id="confirm-delete" class="rounded-md bg-red-500 px-4 py-2 text-xs font-semibold text-white hover:bg-red-600">Delete</button>
+            </div>
+        </div>
+    </div>
 
-            </main>
+    <script>
+        const deleteModal = document.getElementById('delete-modal');
+        const deleteBrandName = document.getElementById('delete-brand-name');
+        let selectedBrandId = null;
 
-            <!-- Main Content End -->
+        function openDeleteModal(brandId, brandName) {
+            selectedBrandId = brandId;
+            deleteBrandName.textContent = brandName;
+            deleteModal.classList.remove('hidden');
+            deleteModal.classList.add('flex');
+        }
 
-</x-admin-layout>
+        function closeDeleteModal() {
+            selectedBrandId = null;
+            deleteModal.classList.add('hidden');
+            deleteModal.classList.remove('flex');
+        }
+
+        document.getElementById('cancel-delete').addEventListener('click', closeDeleteModal);
+        document.getElementById('confirm-delete').addEventListener('click', function () {
+            if (selectedBrandId) document.getElementById('delete-brand-' + selectedBrandId).submit();
+        });
+        deleteModal.addEventListener('click', function (event) {
+            if (event.target === deleteModal) closeDeleteModal();
+        });
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && !deleteModal.classList.contains('hidden')) closeDeleteModal();
+        });
+    </script>
+@endsection
